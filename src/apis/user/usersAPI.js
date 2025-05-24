@@ -1,4 +1,3 @@
-// services/authService.js or api/auth.js
 
 import axios from "axios";
 
@@ -28,3 +27,23 @@ export const registerAPI = async (userData) => {
         }
     }
 };
+
+
+export const loginAPI = async (userData) => {
+    try {
+        const response = await apiClient.post("/login", {
+            email: userData.email,
+            password: userData.password,
+            captchaToken: userData.captchaToken, 
+        });
+
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Login failed");
+        } else {
+            throw new Error("Network error or server unavailable");
+        }
+    }
+};
+
