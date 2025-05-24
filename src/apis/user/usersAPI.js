@@ -2,8 +2,8 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: "https://yourapi.com/api", 
-    withCredentials: true, 
+    baseURL: "https://yourapi.com/api",
+    withCredentials: true,
     headers: {
         "Content-Type": "application/json",
     },
@@ -34,7 +34,7 @@ export const loginAPI = async (userData) => {
         const response = await apiClient.post("/login", {
             email: userData.email,
             password: userData.password,
-            captchaToken: userData.captchaToken, 
+            captchaToken: userData.captchaToken,
         });
 
         return response.data;
@@ -45,5 +45,11 @@ export const loginAPI = async (userData) => {
             throw new Error("Network error or server unavailable");
         }
     }
+};
+
+
+export const getUserProfileAPI = async () => {
+    const response = await apiClient.get("/profile");
+    return response.data;
 };
 
