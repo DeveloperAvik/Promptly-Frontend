@@ -1,0 +1,10 @@
+{
+    "nav": {
+        "home": "Home",
+        "legal_rights": "Legal Rights",
+        "ask_lawyer": "Ask a Lawyer",
+        "resources": "Resources",
+        "about": "About",
+        "login": "Log In"
+    }
+}

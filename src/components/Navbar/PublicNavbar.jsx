@@ -2,16 +2,25 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-
-const navigation = [
-    { name: "Home", href: "/" },
-    { name: "Features", href: "/features" },
-    { name: "Pricing", href: "/plans" },
-    { name: "About", href: "/about" },
-];
+import { useTranslation } from "react-i18next";
 
 export default function PublicNavbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { t, i18n } = useTranslation();
+
+    const navigation = [
+        { name: t("nav.home"), href: "/" },
+        { name: t("nav.legal_rights"), href: "/rights" },
+        { name: t("nav.ask_lawyer"), href: "/ask" },
+        { name: t("nav.resources"), href: "/resources" },
+        { name: t("nav.about"), href: "/about" },
+    ];
+
+    const handleLanguageChange = (e) => {
+        const lang = e.target.value;
+        i18n.changeLanguage(lang);
+        console.log("Language switched to:", lang);
+    };
 
     return (
         <div className="bg-gray-900">
@@ -37,33 +46,45 @@ export default function PublicNavbar() {
                     </div>
 
                     {/* Desktop navigation */}
-                    <div className="hidden lg:flex lg:gap-x-12">
+                    <div className="hidden lg:flex lg:gap-x-10">
                         {navigation.map((item) => (
                             <Link
-                                key={item.name}
+                                key={item.href}
                                 to={item.href}
-                                className="text-sm font-semibold leading-6 text-white"
+                                className="text-sm font-semibold leading-6 text-white hover:text-yellow-400"
                             >
                                 {item.name}
                             </Link>
                         ))}
                     </div>
 
-                    {/* Log in link */}
-                    <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                        <Link to="/login" className="text-sm font-semibold leading-6 text-white">
-                            Log in <span aria-hidden="true">&rarr;</span>
+                    {/* Language & Login */}
+                    <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center space-x-4">
+                        <select
+                            onChange={handleLanguageChange}
+                            className="text-sm text-gray-800 bg-white rounded px-2 py-1"
+                        >
+                            <option value="en">EN</option>
+                            <option value="hi">हिंदी</option>
+                            <option value="bn">বাংলা</option>
+                        </select>
+
+                        <Link
+                            to="/login"
+                            className="text-sm font-semibold leading-6 text-white hover:text-yellow-400"
+                        >
+                            {t("nav.login")} <span aria-hidden="true">&rarr;</span>
                         </Link>
                     </div>
                 </nav>
 
                 {/* Mobile menu dialog */}
                 <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
-                    <div className="fixed inset-0 z-50" />
-                    <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-white/10">
+                    <div className="fixed inset-0 z-50 bg-black/50" />
+                    <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-gray-900 px-6 py-6 sm:ring-1 sm:ring-white/10">
                         <div className="flex items-center justify-between">
-                            <Link to="/" className="-m-1.5 p-1.5 text-white text-lg font-bold">
-                                Promptly
+                            <Link to="/" className="-m-1.5 p-1.5 text-white text-xl font-bold">
+                                🔱 DharmaNet
                             </Link>
                             <button
                                 type="button"
@@ -74,30 +95,35 @@ export default function PublicNavbar() {
                                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                             </button>
                         </div>
-                        <div className="mt-6 flow-root">
-                            <div className="-my-6 divide-y divide-gray-500/25">
-                                <div className="space-y-2 py-6">
-                                    {navigation.map((item) => (
-                                        <Link
-                                            key={item.name}
-                                            to={item.href}
-                                            className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                                            onClick={() => setMobileMenuOpen(false)}
-                                        >
-                                            {item.name}
-                                        </Link>
-                                    ))}
-                                </div>
-                                <div className="py-6">
-                                    <Link
-                                        to="/login"
-                                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                        Log in
-                                    </Link>
-                                </div>
-                            </div>
+
+                        <div className="mt-6 space-y-4">
+                            {navigation.map((item) => (
+                                <Link
+                                    key={item.href}
+                                    to={item.href}
+                                    className="block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-800"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    {item.name}
+                                </Link>
+                            ))}
+
+                            <select
+                                onChange={handleLanguageChange}
+                                className="w-full bg-white text-gray-800 rounded px-2 py-2 text-sm mt-2"
+                            >
+                                <option value="en">English</option>
+                                <option value="hi">हिंदी</option>
+                                <option value="bn">বাংলা</option>
+                            </select>
+
+                            <Link
+                                to="/login"
+                                className="block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-800"
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                {t("nav.login")}
+                            </Link>
                         </div>
                     </Dialog.Panel>
                 </Dialog>
